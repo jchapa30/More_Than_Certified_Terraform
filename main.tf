@@ -33,7 +33,6 @@ output "Ip-Address" {
   description = "IP address of the container"
   
 }
-
 output "container-name" {
   value = docker_container.nodered_container.name
   description = "Container name"
