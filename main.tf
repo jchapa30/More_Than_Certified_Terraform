@@ -7,22 +7,35 @@ terraform {
   }
 }
 
-provider "docker" {
-  # Add the provider version here, or leave it empty for the latest version.
-  # version = "x.x.x"
+provider "docker" {}
+
+# Image
+resource "docker_image" "nodered_image" {
+  name = "nodered/node-red:latest"
 }
 
 # Start a container
 resource "docker_container" "nodered_container" {
   name  = "nodered"
-  image = "nodered/node-red:latest"
+  image = docker_image.nodered_image.name  
+
   ports {
     internal = 1880
     external = 1880
   }
+
+  # Specify the network mode for the container
+  network_mode = "bridge"
+}
+
+output "Ip-Address" {
+  value = docker_container.nodered_container.ip_address
+  description = "IP address of the container"
   
-  # Specify the network for the container
-  network {
-    name = "bridge"
-  }
+}
+
+output "container-name" {
+  value = docker_container.nodered_container.name
+  description = "Container name"
+  
 }
