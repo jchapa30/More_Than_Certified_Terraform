@@ -18,11 +18,21 @@ resource "docker_image" "nodered_image" {
 resource "docker_container" "nodered_container" {
   name  = "nodered"
   image = docker_image.nodered_image.name
-
   ports {
     internal = 1880
-    external = 1880
+    #external = 1880
   }
+}
+
+# Start a second container
+resource "docker_container" "nodered_container2" {
+  name  = "nodered2"
+  image = docker_image.nodered_image.name
+  ports {
+    internal = 1880
+    #external = 1880
+  }
+
 
   # Specify the network mode for the container
   network_mode = "bridge"
