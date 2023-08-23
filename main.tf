@@ -14,37 +14,29 @@ resource "docker_image" "nodered_image" {
   name = "nodered/node-red:latest"
 }
 
+# Pull the Nginx image from Docker Hub
+resource "docker_image" "nginx_image" {
+  name = "nginx:latest"
+}
+
 # Start a container
 resource "docker_container" "nodered_container" {
   name  = "nodered"
   image = docker_image.nodered_image.name
   ports {
     internal = 1880
-    #external = 1880
+    external = 1880
   }
 }
 
-# Start a second container
-resource "docker_container" "nodered_container2" {
-  name  = "nodered2"
-  image = docker_image.nodered_image.name
+
+# Start a container
+resource "docker_container" "nginx_image" {
+  name  = "nginx"
+  image = docker_image.nginx_image.name
   ports {
-    internal = 1880
-    #external = 1880
+    internal = 8080
+    external = 8080
   }
-
-
-  # Specify the network mode for the container
-  network_mode = "bridge"
 }
 
-output "Ip-Address" {
-  value       = docker_container.nodered_container.ip_address
-  description = "IP address of the container"
-
-}
-output "container-name" {
-  value       = docker_container.nodered_container.name
-  description = "Container name"
-
-}
