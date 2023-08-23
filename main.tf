@@ -32,11 +32,19 @@ resource "docker_container" "nodered_container" {
 
 # Start a container
 resource "docker_container" "nginx_image" {
-  name  = "nginx"
+  count = 2
+  name  = join("-", ["nodered", random_string.random[count.index].result])
   image = docker_image.nginx_image.name
   ports {
     internal = 8080
     external = 8080
   }
+}
+
+resource "random_string" "random" {
+  count   = 2
+  length  = 4
+  special = false
+  upper   = false
 }
 
